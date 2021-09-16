@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class Employee(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Long = 0L,
+    @ColumnInfo(name = "userId") val userId: Long = 0L,
     @ColumnInfo(name = "name") val name: String = "",
-    @ColumnInfo(name = "city") val city: String = "",
-    @ColumnInfo(name = "storage") val storages: List<Storage> = ArrayList()
+    @ColumnInfo(name = "city") val city: String = ""
 )

@@ -8,7 +8,8 @@ import androidx.room.PrimaryKey
 data class Customer(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Long = 0L,
+    @ColumnInfo(name = "userId") val userId: Long = 0L,
+    @ColumnInfo(name = "employeeId") val employeeId: Long = 0L,
     @ColumnInfo(name = "name") val name: String = "",
-    @ColumnInfo(name = "pib") val pib: String = "",
-    @ColumnInfo(name = "employees") val employees: List<Employee> = ArrayList()
+    @ColumnInfo(name = "pib") val pib: String = ""
 )
