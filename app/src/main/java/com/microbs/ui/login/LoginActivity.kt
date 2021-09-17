@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
                 return@observe
             }
 
-            Repository.userId = user.id
+            Repository.userId = user.userId
 
             MainActivity.start(this)
             finish()
@@ -46,8 +46,7 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener {
             val username = binding.usernameEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
-//            loginViewModel.login(username, password)
-            loginViewModel.login("makvasic", "123123")
+            loginViewModel.login(username, password)
         }
 
         binding.registerButton.setOnClickListener {
@@ -56,6 +55,10 @@ class LoginActivity : AppCompatActivity() {
             val user = User(0, username, password)
             loginViewModel.register(user)
 
+        }
+
+        binding.loginWithDataButton.setOnClickListener {
+            loginViewModel.login("makvasic", "123456789")
         }
 
 

@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val database: AppDatabase by lazy { AppDatabase.getInstance(application) }
+    private val database: AppDatabase = AppDatabase.getInstance(application)
 
     private val _loginLiveData = MutableLiveData<User?>()
     val loginLiveData: LiveData<User?> = _loginLiveData

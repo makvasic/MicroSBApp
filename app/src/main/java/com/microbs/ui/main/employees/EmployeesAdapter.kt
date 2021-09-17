@@ -8,20 +8,20 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.microbs.R
 import com.microbs.databinding.ItemEmployeeBinding
-import com.microbs.model.Employee
+import com.microbs.model.EmployeeWithStorages
 
-class EmployeesAdapter : ListAdapter<Employee, EmployeesAdapter.EmployeeHolder>(object :
-    DiffUtil.ItemCallback<Employee>() {
+class EmployeesAdapter : ListAdapter<EmployeeWithStorages, EmployeesAdapter.EmployeeHolder>(object :
+    DiffUtil.ItemCallback<EmployeeWithStorages>() {
     override fun areItemsTheSame(
-        oldItem: Employee,
-        newItem: Employee
+        oldItem: EmployeeWithStorages,
+        newItem: EmployeeWithStorages
     ): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.employee.employeeId == newItem.employee.employeeId
     }
 
     override fun areContentsTheSame(
-        oldItem: Employee,
-        newItem: Employee
+        oldItem: EmployeeWithStorages,
+        newItem: EmployeeWithStorages
     ): Boolean {
         return oldItem == newItem
     }
@@ -39,7 +39,7 @@ class EmployeesAdapter : ListAdapter<Employee, EmployeesAdapter.EmployeeHolder>(
     }
 
     class EmployeeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: Employee) {
+        fun bind(item: EmployeeWithStorages) {
             val binding = ItemEmployeeBinding.bind(itemView)
 
             binding.employeeTextView.text = item.toString()

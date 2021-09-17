@@ -1,14 +1,12 @@
 package com.microbs.ui.main.employees
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.microbs.databinding.FragmentEmployeesBinding
-import com.microbs.ui.Repository
 import com.microbs.ui.main.MainViewModel
 
 class EmployeesFragment : Fragment() {
@@ -31,16 +29,13 @@ class EmployeesFragment : Fragment() {
         val adapter = EmployeesAdapter()
         binding.recyclerView.adapter = adapter
 
-        mainViewModel.employeesLiveData.observe(viewLifecycleOwner) {
+        mainViewModel.employeesWithStoragesLiveData.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.GONE
             adapter.submitList(it)
-            Log.d("TTT", it.size.toString())
         }
 
         binding.progressBar.visibility = View.VISIBLE
-        Log.d("TTT", Repository.userId.toString())
-        mainViewModel.getEmployees(Repository.userId)
-
+        mainViewModel.getEmployeesWithStorages()
 
     }
 
