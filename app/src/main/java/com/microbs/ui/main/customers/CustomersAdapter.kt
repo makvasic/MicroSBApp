@@ -10,23 +10,17 @@ import com.microbs.R
 import com.microbs.databinding.ItemCustomerBinding
 import com.microbs.model.Customer
 
-class CustomersAdapter : ListAdapter<Customer, CustomersAdapter.CustomerHolder>(object :
-    DiffUtil.ItemCallback<Customer>() {
-    override fun areItemsTheSame(
-        oldItem: Customer,
-        newItem: Customer
-    ): Boolean {
-        return oldItem.customerId == newItem.customerId
-    }
+class CustomersAdapter(val onCustomerClick: (customer: Customer) -> Unit) :
+    ListAdapter<Customer, CustomersAdapter.CustomerHolder>(object :
+        DiffUtil.ItemCallback<Customer>() {
+        override fun areItemsTheSame(oldItem: Customer, newItem: Customer): Boolean {
+            return oldItem.customerId == newItem.customerId
+        }
 
-    override fun areContentsTheSame(
-        oldItem: Customer,
-        newItem: Customer
-    ): Boolean {
-        return oldItem == newItem
-    }
-
-}) {
+        override fun areContentsTheSame(oldItem: Customer, newItem: Customer): Boolean {
+            return oldItem == newItem
+        }
+    }) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomerHolder {
         return CustomerHolder(
@@ -35,14 +29,18 @@ class CustomersAdapter : ListAdapter<Customer, CustomersAdapter.CustomerHolder>(
     }
 
     override fun onBindViewHolder(holder: CustomerHolder, position: Int) {
-        holder.bind(getItem(position))
+        val customer = getItem(position)
+        holder.bind(customer)
+        holder.itemView.setOnClickListener {
+            onCustomerClick(customer)
+        }
     }
 
     class CustomerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: Customer) {
+        fun bind(customer: Customer) {
             val binding = ItemCustomerBinding.bind(itemView)
 
-            binding.customerTextView.text = item.toString()
+            binding.customerTextView.text = customer.toString()
         }
     }
 }

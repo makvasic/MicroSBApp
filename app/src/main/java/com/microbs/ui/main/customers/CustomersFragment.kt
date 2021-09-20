@@ -17,7 +17,11 @@ class CustomersFragment : Fragment() {
     private var _binding: FragmentCustomersBinding? = null
     private val binding get() = _binding!!
 
-    private val adapter by lazy { CustomersAdapter() }
+    private val adapter by lazy {
+        CustomersAdapter {
+            // TODO: 20.9.2021. Start customerFragment
+        }
+    }
     private val spinnerAdapter by lazy { EmployeesSpinnerAdapter(requireContext()) }
     private val mainViewModel: MainViewModel by activityViewModels()
 

@@ -9,7 +9,7 @@ import com.microbs.model.*
 import java.util.concurrent.Executors
 
 @Database(
-    entities = [User::class, Employee::class, Customer::class, Storage::class, EmployeeStorageCrossRef::class],
+    entities = [User::class, Employee::class, Customer::class, Storage::class, EmployeeStorageCrossRef::class, Retro::class],
     version = 1,
     exportSchema = false
 )
@@ -20,6 +20,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun employeeDao(): EmployeeDao
     abstract fun customerDao(): CustomerDao
     abstract fun employeeStorageCrossRefDao(): EmployeeStorageCrossRefDao
+    abstract fun retroDao(): RetroDao
 
 
     companion object {

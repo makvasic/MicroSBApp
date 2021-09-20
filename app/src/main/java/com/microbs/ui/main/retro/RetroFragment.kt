@@ -5,20 +5,40 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.microbs.R
+import androidx.fragment.app.viewModels
+import com.microbs.databinding.FragmentRetroBinding
 
 class RetroFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var _binding: FragmentRetroBinding? = null
+    private val binding get() = _binding!!
+
+    private val retroViewModel: RetroViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_retro, container, false)
+    ): View {
+        _binding = FragmentRetroBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val adapter = RetrosAdapter()
+        binding.recyclerView.adapter = adapter
+
+        retroViewModel.retrosFroUserLiveData.observe(viewLifecycleOwner) {
+            binding.progressBar.visibility = View.GONE
+            adapter.submitList(it)
+        }
+
+        binding.progressBar.visibility = View.VISIBLE
+        retroViewModel.getRetrosForUser("makvasic")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
