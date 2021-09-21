@@ -10,17 +10,18 @@ import com.microbs.R
 import com.microbs.databinding.ItemEmployeeBinding
 import com.microbs.model.EmployeeWithStorages
 
-class EmployeesAdapter : ListAdapter<EmployeeWithStorages, EmployeesAdapter.EmployeeHolder>(object :
-    DiffUtil.ItemCallback<EmployeeWithStorages>() {
-    override fun areItemsTheSame(
-        oldItem: EmployeeWithStorages,
-        newItem: EmployeeWithStorages
-    ): Boolean {
-        return oldItem.employee.employeeId == newItem.employee.employeeId
-    }
+class EmployeesAdapter(val onEmployeeClick: (employeeWithStorages: EmployeeWithStorages) -> Unit) :
+    ListAdapter<EmployeeWithStorages, EmployeesAdapter.EmployeeHolder>(object :
+        DiffUtil.ItemCallback<EmployeeWithStorages>() {
+        override fun areItemsTheSame(
+            oldItem: EmployeeWithStorages,
+            newItem: EmployeeWithStorages
+        ): Boolean {
+            return oldItem.employee.employeeId == newItem.employee.employeeId
+        }
 
-    override fun areContentsTheSame(
-        oldItem: EmployeeWithStorages,
+        override fun areContentsTheSame(
+            oldItem: EmployeeWithStorages,
         newItem: EmployeeWithStorages
     ): Boolean {
         return oldItem == newItem
@@ -35,7 +36,11 @@ class EmployeesAdapter : ListAdapter<EmployeeWithStorages, EmployeesAdapter.Empl
     }
 
     override fun onBindViewHolder(holder: EmployeeHolder, position: Int) {
-        holder.bind(getItem(position))
+        val employeeWithStorages = getItem(position)
+        holder.bind(employeeWithStorages)
+        holder.itemView.setOnClickListener {
+            onEmployeeClick(employeeWithStorages)
+        }
     }
 
     class EmployeeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

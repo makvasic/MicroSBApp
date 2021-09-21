@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.microbs.R
 import com.microbs.databinding.FragmentEmployeesBinding
 import com.microbs.ui.main.MainViewModel
 
@@ -26,8 +27,14 @@ class EmployeesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val adapter = EmployeesAdapter()
+        val adapter = EmployeesAdapter {
+            showEmployeeFragment(it.employee.employeeId)
+        }
         binding.recyclerView.adapter = adapter
+
+        binding.fab.setOnClickListener {
+            showEmployeeFragment(0L)
+        }
 
         mainViewModel.employeesWithStoragesLiveData.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.GONE
@@ -37,6 +44,16 @@ class EmployeesFragment : Fragment() {
         binding.progressBar.visibility = View.VISIBLE
         mainViewModel.getEmployeesWithStorages()
 
+    }
+
+    private fun showEmployeeFragment(employeeId: Long) {
+        parentFragmentManager.beginTransaction()
+            .replace(
+                R.id.fragmentContainer,
+                EmployeeFragment.newInstance(employeeId)
+            )
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDestroyView() {

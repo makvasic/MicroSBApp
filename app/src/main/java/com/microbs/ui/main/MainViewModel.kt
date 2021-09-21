@@ -6,8 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.microbs.database.AppDatabase
+import com.microbs.model.EmployeeStorageCrossRef
 import com.microbs.model.EmployeeWithCustomers
 import com.microbs.model.EmployeeWithStorages
+import com.microbs.model.Storage
 import com.microbs.ui.Repository
 import kotlinx.coroutines.launch
 
@@ -26,6 +28,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun saveEmployeeWithStorages(employeeWithStorages: EmployeeWithStorages) {
+        viewModelScope.launch {
+            val employeeId = database.employeeDao().saveEmployee(employeeWithStorages.employee)
+
+            val employeeStorageCrossRefs = ArrayList<EmployeeStorageCrossRef>()
+            val storages = employeeWithStorages.storages
+            storages.forEach { storage ->
+                employeeStorageCrossRefs.add(EmployeeStorageCrossRef(employeeId, storage.storageId))
+            }
+            database.employeeStorageCrossRefDao().insertForEmployee(employeeStorageCrossRefs)
+        }
+    }
+
+
     private val _employeesWithCustomersLiveData = MutableLiveData<List<EmployeeWithCustomers>>()
     val employeesWithCustomersLiveData: LiveData<List<EmployeeWithCustomers>> =
         _employeesWithCustomersLiveData
@@ -35,6 +51,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _employeesWithCustomersLiveData.value =
                 database.employeeDao().getEmployeesWithCustomers(Repository.userId)
         }
+    }
+
+
+    val storagesLiveData = MutableLiveData<List<Storage>?>()
+    fun getStorages() {
+        viewModelScope.launch {
+            storagesLiveData.value = database.storageDao().getAll()
+        }
+    }
+
+    fun addStoragesToEmployee(employeeStorageCrossRefs: ArrayList<EmployeeStorageCrossRef>) {
+        viewModelScope.launch {
+            database.employeeStorageCrossRefDao().insertForEmployee(employeeStorageCrossRefs)
+        }
+
     }
 
 

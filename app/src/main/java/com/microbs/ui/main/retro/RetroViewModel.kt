@@ -17,6 +17,7 @@ class RetroViewModel(application: Application) : AndroidViewModel(application) {
         _retrosFroUserLiveData
 
     fun getRetrosForUser(gitUsername: String) {
+        if (_retrosFroUserLiveData.value != null) return
         viewModelScope.launch {
             _retrosFroUserLiveData.value =
                 retroRepository.getRetrosForUser(gitUsername)
