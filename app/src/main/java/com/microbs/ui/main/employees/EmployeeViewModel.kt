@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.microbs.database.AppDatabase
 import com.microbs.model.Employee
+import com.microbs.model.EmployeeStorageCrossRef
 import com.microbs.model.EmployeeWithStorages
 import com.microbs.ui.Repository
 import kotlinx.coroutines.launch
@@ -20,9 +21,6 @@ class EmployeeViewModel(application: Application) : AndroidViewModel(application
         _employeeWithStoragesLiveData
 
     fun getEmployeeWithStorages(employeeId: Long) {
-
-        if (_employeeWithStoragesLiveData.value != null) return
-
         if (employeeId == 0L) {
             _employeeWithStoragesLiveData.value =
                 EmployeeWithStorages(Employee(userId = Repository.userId), ArrayList())
@@ -32,6 +30,21 @@ class EmployeeViewModel(application: Application) : AndroidViewModel(application
             _employeeWithStoragesLiveData.value =
                 database.employeeDao().getEmployeeWithStorages(employeeId)
         }
+    }
+
+    fun updateEmployeeStorages(
+        employeeId: Long,
+        refsToInsert: ArrayList<EmployeeStorageCrossRef>,
+        refsToDelete: ArrayList<EmployeeStorageCrossRef>
+    ) {
+        viewModelScope.launch {
+            database.employeeStorageCrossRefDao().deleteRefs(refsToDelete)
+            database.employeeStorageCrossRefDao().insertRefs(refsToInsert)
+
+            _employeeWithStoragesLiveData.value =
+                database.employeeDao().getEmployeeWithStorages(employeeId)
+        }
+
     }
 
 

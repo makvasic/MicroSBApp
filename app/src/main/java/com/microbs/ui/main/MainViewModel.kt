@@ -37,7 +37,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             storages.forEach { storage ->
                 employeeStorageCrossRefs.add(EmployeeStorageCrossRef(employeeId, storage.storageId))
             }
-            database.employeeStorageCrossRefDao().insertForEmployee(employeeStorageCrossRefs)
+            database.employeeStorageCrossRefDao().insertRefs(employeeStorageCrossRefs)
         }
     }
 
@@ -59,13 +59,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             storagesLiveData.value = database.storageDao().getAll()
         }
-    }
-
-    fun addStoragesToEmployee(employeeStorageCrossRefs: ArrayList<EmployeeStorageCrossRef>) {
-        viewModelScope.launch {
-            database.employeeStorageCrossRefDao().insertForEmployee(employeeStorageCrossRefs)
-        }
-
     }
 
 
