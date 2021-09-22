@@ -8,8 +8,11 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.microbs.R
 import com.microbs.databinding.FragmentCustomersBinding
+import com.microbs.model.Customer
 import com.microbs.model.EmployeeWithCustomers
+import com.microbs.ui.Repository
 import com.microbs.ui.main.MainViewModel
 
 class CustomersFragment : Fragment() {
@@ -19,7 +22,7 @@ class CustomersFragment : Fragment() {
 
     private val adapter by lazy {
         CustomersAdapter {
-            // TODO: 20.9.2021. Start customerFragment
+            showCustomerFragment(it)
         }
     }
     private val spinnerAdapter by lazy { EmployeesSpinnerAdapter(requireContext()) }
@@ -52,7 +55,12 @@ class CustomersFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
+        }
 
+        binding.fab.setOnClickListener {
+            val employeeId =
+                (binding.spinner.selectedItem as EmployeeWithCustomers).employee.employeeId
+            showCustomerFragment(Customer(0L, Repository.userId, employeeId))
         }
 
         mainViewModel.employeesWithCustomersLiveData.observe(viewLifecycleOwner) { employeesWithCustomers ->
@@ -75,6 +83,16 @@ class CustomersFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun showCustomerFragment(customer: Customer) {
+        parentFragmentManager.beginTransaction()
+            .replace(
+                R.id.fragmentContainer,
+                CustomerFragment.newInstance(customer)
+            )
+            .addToBackStack(null)
+            .commit()
     }
 
     companion object {

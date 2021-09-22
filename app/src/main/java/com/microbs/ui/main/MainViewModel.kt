@@ -6,10 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.microbs.database.AppDatabase
-import com.microbs.model.EmployeeStorageCrossRef
-import com.microbs.model.EmployeeWithCustomers
-import com.microbs.model.EmployeeWithStorages
-import com.microbs.model.Storage
+import com.microbs.model.*
 import com.microbs.ui.Repository
 import kotlinx.coroutines.launch
 
@@ -50,6 +47,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             _employeesWithCustomersLiveData.value =
                 database.employeeDao().getEmployeesWithCustomers(Repository.userId)
+        }
+    }
+
+    fun saveCustomer(customer: Customer) {
+        viewModelScope.launch {
+            database.customerDao().insert(customer)
+        }
+    }
+
+    fun deleteCustomer(customer: Customer) {
+        viewModelScope.launch {
+            database.customerDao().delete(customer)
         }
     }
 
